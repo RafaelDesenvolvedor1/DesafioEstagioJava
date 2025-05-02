@@ -45,7 +45,7 @@ public class TarefaController {
                          .map(tarefa -> {
                             tarefa.setTitulo(novaTarefa.getTitulo());
                             tarefa.setDescricao(novaTarefa.getDescricao());
-                            tarefa.setConcluido(tarefa.getConcluido());
+                            tarefa.setConcluido(novaTarefa.getConcluido());
                             return ResponseEntity.ok(repository.save(tarefa));
                          })
                          .orElse(ResponseEntity .notFound().build());
