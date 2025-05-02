@@ -12,12 +12,14 @@ export function Main() {
     } = useContext(ListContext)
 
     const [inputText, setInputText] = useState('')
+    const [inputTitle, setInputTitle] = useState('')
 
     function handleAddTask(e) {
         e.preventDefault()
 
-        addTask(inputText)
+        addTask(inputTitle,inputText)
 
+        setInputTitle('')
         setInputText('')
 
         // console.log(lista)
@@ -31,11 +33,20 @@ export function Main() {
     return (
         <div>
             <form onSubmit={handleAddTask}>
+            <input
+                    type="text"
+                    placeholder="Titulo"
+                    value={inputTitle}
+                    onChange={(e) => setInputTitle(e.target.value)}
+                />
+
                 <input
                     type="text"
+                    placeholder="Text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                 />
+
                 <button>Add task</button>
             </form>
 

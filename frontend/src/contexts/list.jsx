@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import api from "../services/api";
 
 export const ListContext=createContext({})
 
@@ -6,19 +7,26 @@ export function ListProvider({children}){
     const [lista, setLista]=useState([])
     const [taskConcludes, setTaskConcludes]=useState(0)
 
-    function addTask(text){
-        // setLista(
-        //     ...lista,
-        //   
-        // )
 
-        let task= {
-                    id:Math.random(),
-                    text:text,
-                    checked: false
-                }
+  async function addTask(title,desc){
+        // let task= {
+        //             id:Math.random(),
+        //             text:text,
+        //             checked: false
+        //         }
 
-        setLista([...lista, task])
+        // setLista([...lista, task])
+
+        try{
+           const response = await api.post('/tarefas', {
+            titulo: title,
+            descricao: desc
+           }) 
+        }catch(err){
+            alert(err)
+            console.log("ERRO AO CADASTRAR", err)
+        }
+
     }
 
     function deleteTask(id){
