@@ -1,3 +1,4 @@
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -52,6 +53,35 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+div, ul{
+  width: 100%;
+}
+
+.task{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+
+}
+
+.modal.active{
+  display: block;
+  /* z-index: 1000; */
+}
+
+.modal.active::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom:0;
+  left: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.5;
 }
 
 @media (prefers-color-scheme: light) {

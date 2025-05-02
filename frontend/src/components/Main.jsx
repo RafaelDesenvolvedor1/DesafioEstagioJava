@@ -38,6 +38,7 @@ export function Main() {
                     placeholder="Titulo"
                     value={inputTitle}
                     onChange={(e) => setInputTitle(e.target.value)}
+                    required
                 />
 
                 <input
@@ -45,6 +46,7 @@ export function Main() {
                     placeholder="Text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
+                    required
                 />
 
                 <button>Add task</button>
@@ -60,8 +62,9 @@ export function Main() {
                         <Task
                             key={item.id}
                             id={item.id}
-                            text={item.text}
-                            checked={item.checked}
+                            titulo={item.titulo}
+                            text={item.descricao}
+                            checked={item.concluido}
                         />
                     ))
                 }
