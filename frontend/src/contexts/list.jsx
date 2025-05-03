@@ -70,6 +70,7 @@ async function editarTask(id, titulo, text) {
          descricao: text,
          concluido: status
      }) 
+     alert("Editado com sucesso!")
      }catch(err){
         alert(err)
         console.log("Não foi possivel editar")

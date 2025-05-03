@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import Modal from "./Modal";
+import React, { useState, useContext, useRef } from "react";
 import { ListContext } from "../contexts/list";
 
 //icones
@@ -7,12 +6,25 @@ import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 
+//react-confirm
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { confirmAlert } from "react-confirm-alert";
 
 export function Task({ id, titulo, text, checked }) {
-  const { checkarTask, deleteTask } = useContext(ListContext);
+  const { checkarTask, deleteTask, editarTask } = useContext(ListContext);
   const [checkbox, setCheckbox] = useState(checked);
 
-  const [abrirModal, setAbrirModal] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+
+  const editableTitulo = useRef(null);
+  const editableText = useRef(null);
+
+  function handleEditTask() {
+    if (editableTitulo.current && editableText.current) {
+     //alert(editableText.current.textContent);
+      editarTask(id, editableTitulo.current.textContent, editableText.current.textContent)
+    }
+  }
 
   function handleCheckarTarefa(id, status) {
     setCheckbox(!checkbox);
@@ -20,41 +32,73 @@ export function Task({ id, titulo, text, checked }) {
     checkarTask(id, status);
   }
 
-  function handleAbrirModal() {
-    setAbrirModal(true);
-    // alert('hh')
+  function handleOpenAlert() {
+    confirmAlert({
+      title: "Confirmação",
+      message: "Tem certeza que deseja deletar essa tarefa?",
+      buttons: [
+        {
+          label: "Sim",
+          onClick: () => deleteTask(id),
+        },
+        {
+          label: "Cancelar",
+          onClick: () => {},
+        },
+      ],
+    });
   }
 
   return (
-    <div className="task overflow-hidden">
-      <div class="min-w-sm min-h-[300px] relative flex flex-col items-start mt-7 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-        <a href="#">
-          <h5 class="mb-2 text-2xl  font-bold tracking-tight text-gray-900 dark:text-white">
+    <div className="task overflow-hidden ">
+      <div
+        className={
+          checkbox
+            ? "min-w-sm max-w-sm min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+            : "min-w-sm max-w-sm min-h-[300px] relative flex flex-col items-start mt-7 p-6 bg-green-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 "
+        }
+      >
+        <div>
+          <h5
+            contentEditable={!checked}
+            ref={editableTitulo}
+            className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 dark:text-white bg-transparent border-none  focus:ring-primary focus:border-primary-200 resize-y h-auto break-all"
+          >
             {titulo}
           </h5>
-        </a>
-        <p class="my-3 w-2xs break-all font-normal text-gray-700 dark:text-gray-400">{text}</p>
+        </div>
+        <p
+          ref={editableText}
+          contentEditable={!checked}
+          className="my-3  w-2xs font-normal text-gray-700 dark:text-gray-400 bg-transparent border-none resize-none  focus:ring-primary focus:border-primary-200 break-all "
+        >
+          {text}
+        </p>
+
         <div className="absolute bottom-0 mb-3">
-          <div class="inline-flex rounded-md shadow-xs" role="group">
+          <div className="inline-flex rounded-md shadow-xs" role="group">
             <button
               type="button"
-              class="inline-flex items-center px-8 py-2 text-lg font-medium bg-red-600 text-logo  border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              className="inline-flex items-center px-8 py-2 text-lg font-medium bg-red-600 text-logo  border border-gray-200 rounded-s-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              onClick={handleOpenAlert}
             >
               <MdDelete />
             </button>
             <button
+              disabled={checkbox}
+              title="Clique para cadastrar a tarefa editada"
               type="button"
-              class="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-blue-600 border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-blue-600 border-t border-b border-gray-200 hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              onClick={handleEditTask}
             >
-                <MdEdit />
-
+              <MdEdit />
             </button>
             <button
               type="button"
-              class="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-green-600 border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-green-600 border border-gray-200 rounded-e-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              onClick={() => handleCheckarTarefa(id, !checkbox)}
             >
-                <FaCheck />
-
+              <FaCheck />
             </button>
           </div>
         </div>

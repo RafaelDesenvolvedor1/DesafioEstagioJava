@@ -2,17 +2,21 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { ListContext } from "../contexts/list";
 
-export default function Modal({ id, titulo, text, status, onClose }) {
-  const { editarTask } = useContext(ListContext);
-  const [Titulo, setTitulo] = useState(titulo);
-  const [Text, setText] = useState(text);
+
+
+export default function Modal() {
+  const { addTask } = useContext(ListContext);
+  const [titulo, setTitulo] = useState("");
+  const [text, setText] = useState("");
   // const [statusModal, setStatus] = useState(status)
 
-  function digitarTitulo(e) {
-    setMudarTitulo(e.target.value);
-  }
-  function digitarText(e) {
-    setMudarText(e.target.value);
+  function handleAddTask(e) {
+    e.preventDefault();
+
+    addTask(titulo, text);
+
+    setTitulo("");
+    setText("");
   }
 
   return (
@@ -54,7 +58,7 @@ export default function Modal({ id, titulo, text, status, onClose }) {
             </div>
 
             <div className="p-4 md:p-5">
-              <form className="space-y-4" action="#">
+              <form className="space-y-4" action="#"  onSubmit={handleAddTask}>
                 <div>
                   <label
                     for="titulo"
@@ -68,14 +72,14 @@ export default function Modal({ id, titulo, text, status, onClose }) {
                     type="text"
                     name="titulo"
                     id="titulo"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary-200 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Titulo da tarefa..."
                     required
                   />
                 </div>
                 <div>
                   <label
-                    for="password"
+                    for="descricao"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Descrição
@@ -83,9 +87,9 @@ export default function Modal({ id, titulo, text, status, onClose }) {
                   <textarea
                     type="text"
                     name="descricao"
-                    id="password"
+                    id="descricao"
                     placeholder="Descrição..."
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary-200 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     required
                     rows={10}
                     cols={50}
@@ -96,7 +100,7 @@ export default function Modal({ id, titulo, text, status, onClose }) {
 
                 <button
                   type="submit"
-                  className="w-full text-logo bg-primary hover:bg-primary-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="w-full text-logo bg-primary hover:bg-primary-200 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center focus:ring-primary focus:border-primary-200"
                 >
                   Criar Tarefa
                 </button>
