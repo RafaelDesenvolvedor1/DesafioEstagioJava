@@ -1,34 +1,33 @@
-import React, { createContext, useEffect, useState, useRef } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { toast } from "react-toastify";
 
 export const ListContext = createContext({});
 
 export function ListProvider({ children }) {
-  const [lista, setLista] = useState([]);
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     getTasks();
   }, []);
 
   async function addTask(title, desc) {
-    const salvarTarefa = api.post("/tarefas", {
+    const saveTask = api.post("/tarefas", {
       titulo: title,
       descricao: desc,
     });
 
-    toast.promise(salvarTarefa, {
+    toast.promise(saveTask, {
       pending: "Salvando tarefa...",
       success: "Tarefa salva com sucesso!",
       error: "Erro ao cadastrar a tarefa",
     });
 
     try {
-      const response = await salvarTarefa;
+      const response = await saveTask;
       await getTasks();
       return response;
     } catch (err) {
-      //alert(err);
       console.log("ERRO AO CADASTRAR", err);
     }
   }
@@ -37,18 +36,17 @@ export function ListProvider({ children }) {
     const get = api
       .get("/tarefas")
       .then((response) => JSON.stringify(response.data))
-      .then((data) => setLista(JSON.parse(data)));
+      .then((data) => setList(JSON.parse(data)));
 
     try {
       const response = await get;
       return response;
     } catch (err) {
-      //alert(err);
       console.log("Erro ao buscar os dados");
     }
   }
 
-  async function deleteTask(id) {
+  async function removeTask(id) {
     const deletTask = api.delete(`/tarefas/${id}`);
 
     toast.promise(deletTask, {
@@ -65,21 +63,21 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function checkarTask(id, status) {
-    let encontrarPosicao = lista.findIndex((task) => task.id === id);
-    let guardarTitulo = lista[encontrarPosicao].titulo;
-    let guardarDescricao = lista[encontrarPosicao].descricao;
+  async function checkTask(id, status) {
+    let findPosition = list.findIndex((task) => task.id === id);
+    let saveTitle = list[findPosition].titulo;
+    let saveDescription = list[findPosition].descricao;
 
     const response = await api.put(`/tarefas/${id}`, {
-      titulo: guardarTitulo,
-      descricao: guardarDescricao,
+      titulo: saveTitle,
+      descricao: saveDescription,
       concluido: status,
     });
 
     try {
       const response = api.put(`/tarefas/${id}`, {
-        titulo: guardarTitulo,
-        descricao: guardarDescricao,
+        titulo: saveTitle,
+        descricao: saveDescription,
         concluido: status,
       });
 
@@ -90,12 +88,12 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function editarTask(id, titulo, text) {
-    let encontrarPosicao = lista.findIndex((task) => task.id === id);
-    let status = lista[encontrarPosicao].concluido;
+  async function editTask(id, title, text) {
+    let findPosition = list.findIndex((task) => task.id === id);
+    let status = list[findPosition].concluido;
 
     const saveUpdate = api.put(`/tarefas/${id}`, {
-      titulo: titulo,
+      titulo: title,
       descricao: text,
       concluido: status,
     });
@@ -119,12 +117,12 @@ export function ListProvider({ children }) {
   return (
     <ListContext.Provider
       value={{
-        lista,
+        list,
 
         addTask,
-        deleteTask,
-        checkarTask,
-        editarTask,
+        removeTask,
+        checkTask,
+        editTask,
       }}
     >
       {children}
