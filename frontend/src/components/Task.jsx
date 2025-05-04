@@ -31,12 +31,13 @@ export function Task({ id, titulo, text, checked }) {
 
   function handleEditTask() {
     if (editableTitulo.current && editableText.current) {
-      //alert(editableText.current.textContent);
       editarTask(
         id,
         editableTitulo.current.textContent,
         editableText.current.textContent
       );
+
+      setOpenEdit(false)
     }
   }
 
