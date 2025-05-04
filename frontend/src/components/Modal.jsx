@@ -6,17 +6,17 @@ import { ListContext } from "../contexts/list";
 
 export default function Modal() {
   const { addTask } = useContext(ListContext);
-  const [titulo, setTitulo] = useState("");
-  const [text, setText] = useState("");
+  const [titleValueState, setTitleValueState] = useState("");
+  const [textValueState, setTextValueState] = useState("");
   // const [statusModal, setStatus] = useState(status)
 
   function handleAddTask(e) {
     e.preventDefault();
 
-    addTask(titulo, text);
+    addTask(titleValueState, textValueState);
 
-    setTitulo("");
-    setText("");
+    setTitleValueState("");
+    setTextValueState("");
   }
 
   return (
@@ -28,14 +28,14 @@ export default function Modal() {
         className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
-          <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="relative bg-white rounded-lg shadow-sm ">
+            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 ">
                 Criar Tarefa
               </h3>
               <button
                 type="button"
-                className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
                 data-modal-hide="authentication-modal"
               >
                 <svg
@@ -61,18 +61,18 @@ export default function Modal() {
               <form className="space-y-4" action="#"  onSubmit={handleAddTask}>
                 <div>
                   <label
-                    for="titulo"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="title"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Titulo
                   </label>
                   <input
-                    value={titulo}
-                    onChange={(e) => setTitulo(e.target.value)}
+                    value={titleValueState}
+                    onChange={(e) => setTitleValueState(e.target.value)}
                     type="text"
-                    name="titulo"
-                    id="titulo"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary-200 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    name="title"
+                    id="title"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary-200 block w-full p-2.5 "
                     placeholder="Titulo da tarefa..."
                     required
                   />
@@ -93,8 +93,8 @@ export default function Modal() {
                     required
                     rows={10}
                     cols={50}
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    value={textValueState}
+                    onChange={(e) => setTextValueState(e.target.value)}
                   />
                 </div>
 
