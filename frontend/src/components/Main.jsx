@@ -13,7 +13,7 @@ export function Main() {
   return (
     <div
       id="containerApp"
-      className="rounded-t-4xl bg-white mt-[-30px]  min-h-[60dvh] py-7 flex flex-wrap w-full px-7 gap-7"
+      className="rounded-t-4xl bg-white mt-[-30px]  min-h-[60dvh] py-7 flex flex-wrap w-full px-7 gap-7 max-sm:justify-center"
     >
      
         <button

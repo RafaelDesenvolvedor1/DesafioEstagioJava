@@ -9,8 +9,7 @@
   --font-content:"Poppins", "sans-serif" ;
   --color-primary: #DC0071;
   --color-primary-200: #C60088;
-  --color-logo: #FFEDF5;
- 
+  --color-logo: #FFEDF5; 
 }
 
 
@@ -27,6 +26,8 @@ button:disabled{
   background-color: #ccc;
 }
 
-input:enabled, textarea:enabled{
-  border:1px solid #ccc;
+[contenteditable="true"]{
+  cursor: text;
+  border: 1px solid ;
 }
+

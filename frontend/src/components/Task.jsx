@@ -5,6 +5,7 @@ import { ListContext } from "../contexts/list";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 //react-confirm
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -19,10 +20,23 @@ export function Task({ id, titulo, text, checked }) {
   const editableTitulo = useRef(null);
   const editableText = useRef(null);
 
+  function handleOpenEdit(){
+    if(!checked){
+      setOpenEdit(!openEdit)
+    }else{
+      alert("Tarefa marcada como concluida não pode ser editada")
+    }
+    
+  }
+
   function handleEditTask() {
     if (editableTitulo.current && editableText.current) {
-     //alert(editableText.current.textContent);
-      editarTask(id, editableTitulo.current.textContent, editableText.current.textContent)
+      //alert(editableText.current.textContent);
+      editarTask(
+        id,
+        editableTitulo.current.textContent,
+        editableText.current.textContent
+      );
     }
   }
 
@@ -50,17 +64,20 @@ export function Task({ id, titulo, text, checked }) {
   }
 
   return (
-    <div className="task overflow-hidden ">
+    <div className="task overflow-hidden relative">
       <div
         className={
           checkbox
-            ? "min-w-sm max-w-sm min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-            : "min-w-sm max-w-sm min-h-[300px] relative flex flex-col items-start mt-7 p-6 bg-green-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 "
+            ? "max-w-sm min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+            : " min-h-[300px] relative flex flex-col items-start mt-7 p-6  bg-green-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700  "
         }
       >
         <div>
+          <span onClick={handleOpenEdit} title="Clique para habilitar a edição da tarefa" className="mt-4 cursor-pointer absolute right-0 top-0 m-3">
+            <FaEdit />
+          </span>
           <h5
-            contentEditable={!checked}
+            contentEditable={openEdit}
             ref={editableTitulo}
             className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 dark:text-white bg-transparent border-none  focus:ring-primary focus:border-primary-200 resize-y h-auto break-all"
           >
@@ -69,13 +86,13 @@ export function Task({ id, titulo, text, checked }) {
         </div>
         <p
           ref={editableText}
-          contentEditable={!checked}
-          className="my-3  w-2xs font-normal text-gray-700 dark:text-gray-400 bg-transparent border-none resize-none  focus:ring-primary focus:border-primary-200 break-all "
+          contentEditable={openEdit}
+          className="my-3  w-2xs min-h-[100px] font-normal text-gray-700 dark:text-gray-400 bg-transparent border-none resize-none  focus:ring-primary focus:border-primary-200 break-all "
         >
           {text}
         </p>
 
-        <div className="absolute bottom-0 mb-3">
+        <div className="">
           <div className="inline-flex rounded-md shadow-xs" role="group">
             <button
               type="button"
@@ -85,7 +102,7 @@ export function Task({ id, titulo, text, checked }) {
               <MdDelete />
             </button>
             <button
-              disabled={checkbox}
+              disabled={!openEdit}
               title="Clique para cadastrar a tarefa editada"
               type="button"
               className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-blue-600 border-t border-b border-gray-200 hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
