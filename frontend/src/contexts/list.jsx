@@ -6,7 +6,6 @@ export const ListContext = createContext({});
 
 export function ListProvider({ children }) {
   const [lista, setLista] = useState([]);
-  const isFirstLoad = useRef(true);
 
   useEffect(() => {
     getTasks();
@@ -39,15 +38,6 @@ export function ListProvider({ children }) {
       .get("/tarefas")
       .then((response) => JSON.stringify(response.data))
       .then((data) => setLista(JSON.parse(data)));
-
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false
-      toast.promise(get, {
-        pending: "Carregando tarefas",
-        success: "Tarefas carregadas!",
-        error: "Erro ao carregar as tarefas",
-      });
-    }
 
     try {
       const response = await get;
