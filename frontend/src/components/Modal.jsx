@@ -2,13 +2,10 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { ListContext } from "../contexts/list";
 
-
-
 export default function Modal() {
   const { addTask } = useContext(ListContext);
   const [titleValueState, setTitleValueState] = useState("");
   const [textValueState, setTextValueState] = useState("");
-  // const [statusModal, setStatus] = useState(status)
 
   function handleAddTask(e) {
     e.preventDefault();

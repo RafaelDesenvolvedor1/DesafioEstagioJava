@@ -11,10 +11,10 @@ export function ListProvider({ children }) {
     getTasks();
   }, []);
 
-  async function addTask(title, desc) {
-    const saveTask = api.post("/tarefas", {
-      titulo: title,
-      descricao: desc,
+  async function addTask(titleParam, descriptionParam) {
+    const saveTask = api.post("", {
+      title: titleParam,
+      description: descriptionParam,
     });
 
     toast.promise(saveTask, {
@@ -34,7 +34,7 @@ export function ListProvider({ children }) {
 
   async function getTasks() {
     const get = api
-      .get("/tarefas")
+      .get("")
       .then((response) => JSON.stringify(response.data))
       .then((data) => setList(JSON.parse(data)));
 
@@ -47,7 +47,7 @@ export function ListProvider({ children }) {
   }
 
   async function removeTask(id) {
-    const deletTask = api.delete(`/tarefas/${id}`);
+    const deletTask = api.delete(`/${id}`);
 
     toast.promise(deletTask, {
       pending: "Excluindo tarefa...",
@@ -63,22 +63,16 @@ export function ListProvider({ children }) {
     }
   }
 
-  async function checkTask(id, status) {
+  async function checkTask(id, statusParam) {
     let findPosition = list.findIndex((task) => task.id === id);
-    let saveTitle = list[findPosition].titulo;
-    let saveDescription = list[findPosition].descricao;
-
-    const response = await api.put(`/tarefas/${id}`, {
-      titulo: saveTitle,
-      descricao: saveDescription,
-      concluido: status,
-    });
+    let saveTitle = list[findPosition].title;
+    let saveDescription = list[findPosition].description;
 
     try {
-      const response = api.put(`/tarefas/${id}`, {
-        titulo: saveTitle,
-        descricao: saveDescription,
-        concluido: status,
+      const response = await api.put(`/${id}`, {
+        title: saveTitle,
+        description: saveDescription,
+        status: statusParam,
       });
 
       await getTasks();
@@ -90,12 +84,12 @@ export function ListProvider({ children }) {
 
   async function editTask(id, title, text) {
     let findPosition = list.findIndex((task) => task.id === id);
-    let status = list[findPosition].concluido;
+    let saveStatus = list[findPosition].status;
 
-    const saveUpdate = api.put(`/tarefas/${id}`, {
-      titulo: title,
-      descricao: text,
-      concluido: status,
+    const saveUpdate = api.put(`/${id}`, {
+      title: title,
+      description: text,
+      status: saveStatus,
     });
 
     toast.promise(saveUpdate, {

@@ -3,7 +3,6 @@ package com.todolist.gerenciadorDeTarefas;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,47 +13,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/tarefas")
-//@CrossOrigin(origins = "http://localhost:5173")
-public class TarefaController {
+@RequestMapping("/api/tasks")
+public class TaskController {
 
-    private final TarefaRepository repository;
+    private final TaskRepository repository;
 
-    public TarefaController(TarefaRepository repository){
+    public TaskController(TaskRepository repository){
         this.repository = repository;
     }
 
     @PostMapping
-    public Tarefa criar(@RequestBody Tarefa tarefa){
-        return repository.save(tarefa);
+    public Task CreateTask(@RequestBody Task task){
+        return repository.save(task);
     }
 
     @GetMapping
-    public List<Tarefa> listar(){
+    public List<Task> listTasks(){
         return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tarefa> buscarTarefa(@PathVariable Long id){
+    public ResponseEntity<Task> getTask(@PathVariable Long id){
         return repository.findById(id)
                         .map(ResponseEntity::ok)
                         .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tarefa> atualizar(@PathVariable Long id, @RequestBody Tarefa novaTarefa){
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task newTask){
         return repository.findById(id)
-                         .map(tarefa -> {
-                            tarefa.setTitulo(novaTarefa.getTitulo());
-                            tarefa.setDescricao(novaTarefa.getDescricao());
-                            tarefa.setConcluido(novaTarefa.getConcluido());
-                            return ResponseEntity.ok(repository.save(tarefa));
+                         .map(task -> {
+                            task.setTitle(newTask.getTitle());
+                            task.setDescription(newTask.getDescription());
+                            task.setStatus(newTask.getStatus());
+                            return ResponseEntity.ok(repository.save(task));
                          })
                          .orElse(ResponseEntity .notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar (@PathVariable Long id){
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         if(repository.existsById(id)){
             repository.deleteById(id);
             return ResponseEntity.noContent().build();
