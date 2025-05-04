@@ -68,7 +68,7 @@ export function Task({ id, titulo, text, checked }) {
       <div
         className={
           checkbox
-            ? "max-w-sm min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+            ? " min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
             : " min-h-[300px] relative flex flex-col items-start mt-7 p-6  bg-green-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700  "
         }
       >
