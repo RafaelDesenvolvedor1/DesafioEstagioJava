@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { ListContext } from "../contexts/list";
 
 //icones
@@ -13,6 +13,7 @@ import { confirmAlert } from "react-confirm-alert";
 
 export function Task({ id, titulo, text, checked }) {
   const { checkarTask, deleteTask, editarTask } = useContext(ListContext);
+
   const [checkbox, setCheckbox] = useState(checked);
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -20,13 +21,12 @@ export function Task({ id, titulo, text, checked }) {
   const editableTitulo = useRef(null);
   const editableText = useRef(null);
 
-  function handleOpenEdit(){
-    if(!checked){
-      setOpenEdit(!openEdit)
-    }else{
-      alert("Tarefa marcada como concluida não pode ser editada")
+  function handleOpenEdit() {
+    if (!checked) {
+      setOpenEdit(!openEdit);
+    } else {
+      alert("Tarefa marcada como concluida não pode ser editada");
     }
-    
   }
 
   function handleEditTask() {
@@ -37,10 +37,9 @@ export function Task({ id, titulo, text, checked }) {
         editableText.current.textContent
       );
 
-      setOpenEdit(false)
+      setOpenEdit(!openEdit);
     }
   }
-
   function handleCheckarTarefa(id, status) {
     setCheckbox(!checkbox);
 
@@ -74,7 +73,11 @@ export function Task({ id, titulo, text, checked }) {
         }
       >
         <div>
-          <span onClick={handleOpenEdit} title="Clique para habilitar a edição da tarefa" className="mt-4 cursor-pointer absolute right-0 top-0 m-3">
+          <span
+            onClick={handleOpenEdit}
+            title="Clique para habilitar a edição da tarefa"
+            className="mt-4 cursor-pointer absolute right-0 top-0 m-3"
+          >
             <FaEdit />
           </span>
           <h5
@@ -88,7 +91,7 @@ export function Task({ id, titulo, text, checked }) {
         <p
           ref={editableText}
           contentEditable={openEdit}
-          className="my-3  w-2xs min-h-[100px] font-normal text-gray-700 dark:text-gray-400 bg-transparent border-none resize-none  focus:ring-primary focus:border-primary-200 break-all "
+          className="my-3  w-2xs min-h-[100px] font-normal text-gray-700 dark:text-gray-400 bg-transparent border-none resize-none  focus:ring-primary focus:border-primary-200 break-words "
         >
           {text}
         </p>
@@ -96,6 +99,7 @@ export function Task({ id, titulo, text, checked }) {
         <div className="">
           <div className="inline-flex rounded-md shadow-xs" role="group">
             <button
+              disabled={openEdit}
               type="button"
               className="inline-flex items-center px-8 py-2 text-lg font-medium bg-red-600 text-logo  border border-gray-200 rounded-s-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
               onClick={handleOpenAlert}
@@ -112,6 +116,7 @@ export function Task({ id, titulo, text, checked }) {
               <MdEdit />
             </button>
             <button
+              disabled={openEdit}
               type="button"
               className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-green-600 border border-gray-200 rounded-e-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
               onClick={() => handleCheckarTarefa(id, !checkbox)}

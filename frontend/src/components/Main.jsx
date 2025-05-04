@@ -18,7 +18,7 @@ export function Main() {
      
         <button
           type="button"
-          className="py-2.5 px-5 mt-7 font-medium bg-gray-100 text-primary focus:outline-none  rounded-lg border border-gray-200 hover:bg-gray-200 hover:text-primary-200 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-sm h-[300px] flex justify-center items-center text-8xl"
+          className="py-2.5 px-5 mt-7 font-medium bg-gray-100 text-primary focus:outline-none  rounded-lg border border-gray-200 hover:bg-gray-200 hover:text-primary-200 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-sm h-[300px] flex justify-center items-center text-8xl cursor-pointer"
           data-modal-target="authentication-modal"
           data-modal-toggle="authentication-modal"
          
