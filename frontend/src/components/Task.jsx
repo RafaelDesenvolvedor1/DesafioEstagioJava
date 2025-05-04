@@ -79,7 +79,7 @@ export function Task({ id, titulo, text, checked }) {
           <h5
             contentEditable={openEdit}
             ref={editableTitulo}
-            className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 dark:text-white bg-transparent border-none  focus:ring-primary focus:border-primary-200 resize-y h-auto break-all"
+            className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 dark:text-white bg-transparent border-none  focus:ring-primary focus:border-primary-200 resize-y h-auto break-all mt-3"
           >
             {titulo}
           </h5>
