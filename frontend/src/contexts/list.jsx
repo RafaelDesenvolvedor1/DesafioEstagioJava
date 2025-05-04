@@ -1,125 +1,140 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useRef } from "react";
 import api from "../services/api";
 import { toast } from "react-toastify";
-
 
 export const ListContext = createContext({});
 
 export function ListProvider({ children }) {
   const [lista, setLista] = useState([]);
-  
+  const isFirstLoad = useRef(true);
 
-  useEffect(()=> {
-    getTasks()
-    
-}, [lista])
-
+  useEffect(() => {
+    getTasks();
+  }, []);
 
   async function addTask(title, desc) {
-
     const salvarTarefa = api.post("/tarefas", {
       titulo: title,
       descricao: desc,
     });
 
     toast.promise(salvarTarefa, {
-      pending:"Salvando tarefa...",
+      pending: "Salvando tarefa...",
       success: "Tarefa salva com sucesso!",
-      error: "Erro ao cadastrar a tarefa"
-    })
+      error: "Erro ao cadastrar a tarefa",
+    });
 
     try {
-
-      const response = await salvarTarefa
-      return response
-
+      const response = await salvarTarefa;
+      await getTasks();
+      return response;
     } catch (err) {
       //alert(err);
       console.log("ERRO AO CADASTRAR", err);
     }
-
-
   }
 
   async function getTasks() {
-    try {
-     const response = await api.get("/tarefas")
-        .then(response => JSON.stringify(response.data))
-        .then(data => setLista(JSON.parse(data)))
-    } catch (err) {
-      alert(err);
-      console.log("Erro ao buscar os dados");
+    const get = api
+      .get("/tarefas")
+      .then((response) => JSON.stringify(response.data))
+      .then((data) => setLista(JSON.parse(data)));
+
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false
+      toast.promise(get, {
+        pending: "Carregando tarefas",
+        success: "Tarefas carregadas!",
+        error: "Erro ao carregar as tarefas",
+      });
     }
 
+    try {
+      const response = await get;
+      return response;
+    } catch (err) {
+      //alert(err);
+      console.log("Erro ao buscar os dados");
+    }
   }
 
-  function deleteTask(id) {
-    const deletTask = api.delete(`/tarefas/${id}`)
+  async function deleteTask(id) {
+    const deletTask = api.delete(`/tarefas/${id}`);
 
     toast.promise(deletTask, {
-      pending:"Excluindo tarefa...",
+      pending: "Excluindo tarefa...",
       success: "Tarefa Excluida com sucesso!",
-      error: "Erro ao excluir a tarefa!"
-    })
+      error: "Erro ao excluir a tarefa!",
+    });
+
+    try {
+      await deletTask;
+      await getTasks();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
- async function checkarTask(id, status) {
-   let encontrarPosicao = lista.findIndex((task) => task.id === id);
-    let guardarTitulo = lista[encontrarPosicao].titulo
+  async function checkarTask(id, status) {
+    let encontrarPosicao = lista.findIndex((task) => task.id === id);
+    let guardarTitulo = lista[encontrarPosicao].titulo;
     let guardarDescricao = lista[encontrarPosicao].descricao;
 
-    const response = await api.put(`/tarefas/${id}`,{
+    const response = await api.put(`/tarefas/${id}`, {
+      titulo: guardarTitulo,
+      descricao: guardarDescricao,
+      concluido: status,
+    });
+
+    try {
+      const response = api.put(`/tarefas/${id}`, {
         titulo: guardarTitulo,
         descricao: guardarDescricao,
-        concluido: status
-    })
+        concluido: status,
+      });
 
-}
+      await getTasks();
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-async function editarTask(id, titulo, text) {
+  async function editarTask(id, titulo, text) {
     let encontrarPosicao = lista.findIndex((task) => task.id === id);
-     let status = lista[encontrarPosicao].concluido
+    let status = lista[encontrarPosicao].concluido;
 
-     const saveUpdate = api.put(`/tarefas/${id}`,{
+    const saveUpdate = api.put(`/tarefas/${id}`, {
       titulo: titulo,
       descricao: text,
-      concluido: status
+      concluido: status,
+    });
 
-     })
-
-     toast.promise(saveUpdate, {
+    toast.promise(saveUpdate, {
       pending: "Salvando Alteração...",
       success: "Alteração salva com sucesso!",
-      error: "Erro ao salvar Alteração."
-     })
+      error: "Erro ao salvar Alteração.",
+    });
 
+    try {
+      const response = await saveUpdate;
 
- 
-     try{
-          const response = await saveUpdate
-
-          return response
-     }catch(err){
-
-       console.log("Erro na promisse")
-
-     }
-  
- 
- }
-
-
+      await getTasks();
+      return response;
+    } catch (err) {
+      console.log("Erro na promisse");
+    }
+  }
 
   return (
     <ListContext.Provider
       value={{
         lista,
-     
 
         addTask,
         deleteTask,
         checkarTask,
-        editarTask
+        editarTask,
       }}
     >
       {children}
