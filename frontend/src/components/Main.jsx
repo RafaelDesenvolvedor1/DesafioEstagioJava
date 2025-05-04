@@ -27,7 +27,7 @@ export function Main() {
         <Task
           key={item.id}
           id={item.id}
-          titulo={item.titulo}
+          title={item.titulo}
           text={item.descricao}
           checked={item.concluido}
         />

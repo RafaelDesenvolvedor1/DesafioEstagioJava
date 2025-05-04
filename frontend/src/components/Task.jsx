@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ListContext } from "../contexts/list";
 
 //icones
@@ -10,40 +10,41 @@ import { FaEdit } from "react-icons/fa";
 //react-confirm
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { confirmAlert } from "react-confirm-alert";
+import { toast } from "react-toastify";
 
-export function Task({ id, titulo, text, checked }) {
-  const { checkarTask, deleteTask, editarTask } = useContext(ListContext);
+export function Task({ id, title, text, checked }) {
+  const { checkTask, removeTask, editTask } = useContext(ListContext);
 
   const [checkbox, setCheckbox] = useState(checked);
 
   const [openEdit, setOpenEdit] = useState(false);
 
-  const editableTitulo = useRef(null);
+  const editableTitle = useRef(null);
   const editableText = useRef(null);
 
   function handleOpenEdit() {
     if (!checked) {
       setOpenEdit(!openEdit);
     } else {
-      alert("Tarefa marcada como concluida não pode ser editada");
+      toast.warning("Tarefa marcada como concluida não pode ser editada")
     }
   }
 
   function handleEditTask() {
-    if (editableTitulo.current && editableText.current) {
-      editarTask(
+    if (editableTitle.current && editableText.current) {
+      editTask(
         id,
-        editableTitulo.current.textContent,
+        editableTitle.current.textContent,
         editableText.current.textContent
       );
 
       setOpenEdit(!openEdit);
     }
   }
-  function handleCheckarTarefa(id, status) {
+  function handleCheckTask(id, status) {
     setCheckbox(!checkbox);
 
-    checkarTask(id, status);
+    checkTask(id, status);
   }
 
   function handleOpenAlert() {
@@ -53,7 +54,7 @@ export function Task({ id, titulo, text, checked }) {
       buttons: [
         {
           label: "Sim",
-          onClick: () => deleteTask(id),
+          onClick: () => removeTask(id),
         },
         {
           label: "Cancelar",
@@ -68,8 +69,8 @@ export function Task({ id, titulo, text, checked }) {
       <div
         className={
           checkbox
-            ? " min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-            : " min-h-[300px] relative flex flex-col items-start mt-7 p-6  bg-green-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700  "
+            ? " min-h-[300px] relative flex flex-col items-start mt-7  p-6 bg-green-600 border border-gray-200 rounded-lg shadow-sm "
+            : " min-h-[300px] relative flex flex-col items-start mt-7 p-6  bg-white border border-gray-200 rounded-lg shadow-sm "
         }
       >
         <div>
@@ -82,10 +83,10 @@ export function Task({ id, titulo, text, checked }) {
           </span>
           <h5
             contentEditable={openEdit}
-            ref={editableTitulo}
-            className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 dark:text-white bg-transparent border-none  focus:ring-primary focus:border-primary-200 resize-y h-auto break-words mt-3 w-[300px]"
+            ref={editableTitle}
+            className="mb-2 text-2xl uppercase font-bold tracking-tight text-gray-900 bg-transparent border-none  focus:ring-primary focus:border-primary-200 h-auto break-words mt-3 w-[300px]"
           >
-            {titulo}
+            {title}
           </h5>
         </div>
         <p
@@ -101,7 +102,7 @@ export function Task({ id, titulo, text, checked }) {
             <button
               disabled={openEdit}
               type="button"
-              className="inline-flex items-center px-8 py-2 text-lg font-medium bg-red-600 text-logo  border border-gray-200 rounded-s-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              className="inline-flex items-center px-8 py-2 text-lg font-medium bg-red-600 text-logo  border border-gray-200 rounded-s-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2 "
               onClick={handleOpenAlert}
             >
               <MdDelete />
@@ -110,7 +111,7 @@ export function Task({ id, titulo, text, checked }) {
               disabled={!openEdit}
               title="Clique para cadastrar a tarefa editada"
               type="button"
-              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-blue-600 border-t border-b border-gray-200 hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-blue-600 border-t border-b border-gray-200 hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2 "
               onClick={handleEditTask}
             >
               <MdEdit />
@@ -118,8 +119,8 @@ export function Task({ id, titulo, text, checked }) {
             <button
               disabled={openEdit}
               type="button"
-              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-green-600 border border-gray-200 rounded-e-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2  dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
-              onClick={() => handleCheckarTarefa(id, !checkbox)}
+              className="inline-flex items-center px-8 py-2 text-lg font-medium text-logo bg-green-600 border border-gray-200 rounded-e-lg hover:bg-primary-200 hover:text-logo focus:z-10 focus:ring-2 "
+              onClick={() => handleCheckTask(id, !checkbox)}
             >
               <FaCheck />
             </button>
@@ -130,24 +131,3 @@ export function Task({ id, titulo, text, checked }) {
   );
 }
 
-{
-  /* <input
-type="checkbox"
-name=""
-id=""
-checked={checkbox}
-onChange={() => handleCheckarTarefa(id, !checkbox)}
-/>
-<p>{titulo}</p>
-<span>{text}</span>
-<button
-className="btn btn-primary"
-onClick = {handleAbrirModal}
-
->
-Editar
-</button>
-<button onClick={() => deleteTask(id)}>Delete</button>
-
- <Modal status={abrirModal} id={id} titulo={titulo} text={text} onClose={() => setAbrirModal(false)}/> */
-}
